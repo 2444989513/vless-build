@@ -1,6 +1,9 @@
 on:
   push:
     tags: 
+      - "x*"
+      - "p*"
+      - "b*"
       - "v*"
 
 name: release-build
@@ -160,19 +163,20 @@ jobs:
           env CGO_ENABLED=0 GOOS=windows GOARCH=arm GOARM=7 go build -o v2ray.exe -ldflags "-s -w" ./main
           env CGO_ENABLED=0 GOOS=windows GOARCH=arm GOARM=7 go build -o wv2ray.exe -ldflags "-s -w -H windowsgui" ./main
           env CGO_ENABLED=0 GOOS=windows GOARCH=arm GOARM=7 go build -o v2ctl.exe -tags confonly -ldflags "-s -w" ./infra/control/main
-          zip windows-arm32-v7.zip v2ray.exe v2ctl.exe wv2ray.exe
+          zip v2ray-windows-arm32-v7.zip v2ray.exe v2ctl.exe wv2ray.exe
           rm -rf v2ray.exe v2ctl.exe wv2ray.exe
 
       - name: Setup env
         run: |
           rm -f main/distro/all/all.go
-          wget -O main/distro/all/all.go https://raw.githubusercontent.com/charlieethan/docker/master/all.go
-          wget -O upx https://github.com/charlieethan/vless-build/releases/download/3.96/upx && chmod +x upx
+          wget -O main/distro/all/all.go https://raw.githubusercontent.com/charlieethan/vless-build/master/src/all.go
+          wget https://github.com/upx/upx/releases/download/v3.96/upx-3.96-amd64_linux.tar.xz && tar -Jxf upx-3.96-amd64_linux.tar.xz
+          mv upx-3.96-amd64_linux/upx $PWD && rm -rf upx-3.96-amd64_linux && chmod +x upx
       - name: Build openwrt-arm32-v5
         run: |
           env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=5 go build -o v2ray -ldflags "-s -w" ./main
           ./upx v2ray
-          zip openwrt-arm32-v5.zip v2ray && rm -rf v2ray
+          zip v2ray-openwrt-arm32-v5.zip v2ray && rm -rf v2ray
 
       - name: Create Release
         id: create_release

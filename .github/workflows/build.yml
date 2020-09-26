@@ -6,7 +6,7 @@ on:
       - "b*"
       - "v*"
 
-name: release-build
+name: build for linux
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -64,74 +64,6 @@ jobs:
           asset_name: v2ray-linux-amd64.zip
           asset_content_type: application/zip
 
-      - name: Build freebsd-386
-        run: |
-          env CGO_ENABLED=0 GOOS=freebsd GOARCH=386 go build -o v2ray -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=freebsd GOARCH=386 go build -o v2ctl -tags confonly -ldflags "-s -w" ./infra/control/main
-          chmod +x v2ray v2ctl
-          zip v2ray-freebsd-386.zip v2ray v2ctl geosite.dat geoip.dat
-          rm -rf v2ray v2ctl
-      - name: Release freebsd-386
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-freebsd-386.zip
-          asset_name: v2ray-freebsd-386.zip
-          asset_content_type: application/zip
-
-      - name: Build freebsd-amd64
-        run: |
-          env CGO_ENABLED=0 GOOS=freebsd GOARCH=amd64 go build -o v2ray -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=freebsd GOARCH=amd64 go build -o v2ctl -tags confonly -ldflags "-s -w" ./infra/control/main
-          chmod +x v2ray v2ctl
-          zip v2ray-freebsd-amd64.zip v2ray v2ctl geosite.dat geoip.dat
-          rm -rf v2ray v2ctl
-      - name: Release freebsd-amd64
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-freebsd-amd64.zip
-          asset_name: v2ray-freebsd-amd64.zip
-          asset_content_type: application/zip
-
-      - name: Build openbsd-386
-        run: |
-          env CGO_ENABLED=0 GOOS=openbsd GOARCH=386 go build -o v2ray -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=openbsd GOARCH=386 go build -o v2ctl -tags confonly -ldflags "-s -w" ./infra/control/main
-          chmod +x v2ray v2ctl
-          zip v2ray-openbsd-386.zip v2ray v2ctl geosite.dat geoip.dat
-          rm -rf v2ray v2ctl
-      - name: Release openbsd-386
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-openbsd-386.zip
-          asset_name: v2ray-openbsd-386.zip
-          asset_content_type: application/zip
-
-      - name: Build openbsd-amd64
-        run: |
-          env CGO_ENABLED=0 GOOS=openbsd GOARCH=amd64 go build -o v2ray -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=openbsd GOARCH=amd64 go build -o v2ctl -tags confonly -ldflags "-s -w" ./infra/control/main
-          chmod +x v2ray v2ctl
-          zip v2ray-openbsd-amd64.zip v2ray v2ctl geosite.dat geoip.dat
-          rm -rf v2ray v2ctl
-      - name: Release openbsd-amd64
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-openbsd-amd64.zip
-          asset_name: v2ray-openbsd-amd64.zip
-          asset_content_type: application/zip
-
       - name: Build linux-arm32-v5
         run: |
           env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=5 go build -o v2ray -ldflags "-s -w" ./main
@@ -147,25 +79,6 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./v2ray-linux-arm32-v5.zip
           asset_name: v2ray-linux-arm32-v5.zip
-          asset_content_type: application/zip
-
-      - name: Build openwrt-arm32-v5
-        run: |
-          rm -f main/distro/all/all.go
-          wget -O main/distro/all/all.go https://raw.githubusercontent.com/charlieethan/vless-build/master/src/all.go
-          wget https://github.com/upx/upx/releases/download/v3.96/upx-3.96-amd64_linux.tar.xz && tar -Jxf upx-3.96-amd64_linux.tar.xz
-          mv upx-3.96-amd64_linux/upx $PWD && rm -rf upx-3.96-amd64_linux && chmod +x upx
-          env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=5 go build -o v2ray -ldflags "-s -w" ./main
-          ./upx v2ray
-          zip v2ray-openwrt-arm32-v5.zip v2ray geosite.dat geoip.dat && rm -rf v2ray
-      - name: Release openwrt-arm32-v5
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-openwrt-arm32-v5.zip
-          asset_name: v2ray-openwrt-arm32-v5.zip
           asset_content_type: application/zip
 
       - name: Build linux-arm32-v6
@@ -406,6 +319,144 @@ jobs:
           asset_name: v2ray-linux-s390x.zip
           asset_content_type: application/zip
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      
+      - name: Gain Dockerfile
+        run: |
+          mkdir docker-build
+          wget -O docker-build/Dockerfile https://raw.githubusercontent.com/charlieethan/vless-build/master/src/Dockerfile
+          wget -O docker-build/config.json https://raw.githubusercontent.com/charlieethan/vless-build/master/src/config.json
+          wget -O docker-build/v2ray.sh https://raw.githubusercontent.com/charlieethan/vless-build/master/src/v2ray.sh
+      
+      - name: Build and push
+        run: |
+          cd docker-build
+          docker buildx build --platform linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/ppc64le,linux/s390x \
+          --output "type=image,push=true" \
+          --tag "${{ secrets.DOCKER_USERNAME }}/vless:latest" \
+          --file Dockerfile .
+
+name: build for others
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Golang
+        uses: actions/setup-go@v2
+        with: 
+          go-version: 1.15.x
+
+      - name: Get code
+        run: |
+          git clone https://github.com/rprx/v2ray-vless.git && mv v2ray-vless/* $PWD && rm -rf v2ray-vless
+          wget -O geosite.dat https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat
+          wget -O geoip.dat https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat
+      - name: Create Release
+        id: create_release
+        uses: monkeyWie/create-release@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+
+      - name: Build freebsd-386
+        run: |
+          env CGO_ENABLED=0 GOOS=freebsd GOARCH=386 go build -o v2ray -ldflags "-s -w" ./main
+          env CGO_ENABLED=0 GOOS=freebsd GOARCH=386 go build -o v2ctl -tags confonly -ldflags "-s -w" ./infra/control/main
+          chmod +x v2ray v2ctl
+          zip v2ray-freebsd-386.zip v2ray v2ctl geosite.dat geoip.dat
+          rm -rf v2ray v2ctl
+      - name: Release freebsd-386
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./v2ray-freebsd-386.zip
+          asset_name: v2ray-freebsd-386.zip
+          asset_content_type: application/zip
+
+      - name: Build freebsd-amd64
+        run: |
+          env CGO_ENABLED=0 GOOS=freebsd GOARCH=amd64 go build -o v2ray -ldflags "-s -w" ./main
+          env CGO_ENABLED=0 GOOS=freebsd GOARCH=amd64 go build -o v2ctl -tags confonly -ldflags "-s -w" ./infra/control/main
+          chmod +x v2ray v2ctl
+          zip v2ray-freebsd-amd64.zip v2ray v2ctl geosite.dat geoip.dat
+          rm -rf v2ray v2ctl
+      - name: Release freebsd-amd64
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./v2ray-freebsd-amd64.zip
+          asset_name: v2ray-freebsd-amd64.zip
+          asset_content_type: application/zip
+
+      - name: Build openbsd-386
+        run: |
+          env CGO_ENABLED=0 GOOS=openbsd GOARCH=386 go build -o v2ray -ldflags "-s -w" ./main
+          env CGO_ENABLED=0 GOOS=openbsd GOARCH=386 go build -o v2ctl -tags confonly -ldflags "-s -w" ./infra/control/main
+          chmod +x v2ray v2ctl
+          zip v2ray-openbsd-386.zip v2ray v2ctl geosite.dat geoip.dat
+          rm -rf v2ray v2ctl
+      - name: Release openbsd-386
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./v2ray-openbsd-386.zip
+          asset_name: v2ray-openbsd-386.zip
+          asset_content_type: application/zip
+
+      - name: Build openbsd-amd64
+        run: |
+          env CGO_ENABLED=0 GOOS=openbsd GOARCH=amd64 go build -o v2ray -ldflags "-s -w" ./main
+          env CGO_ENABLED=0 GOOS=openbsd GOARCH=amd64 go build -o v2ctl -tags confonly -ldflags "-s -w" ./infra/control/main
+          chmod +x v2ray v2ctl
+          zip v2ray-openbsd-amd64.zip v2ray v2ctl geosite.dat geoip.dat
+          rm -rf v2ray v2ctl
+      - name: Release openbsd-amd64
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./v2ray-openbsd-amd64.zip
+          asset_name: v2ray-openbsd-amd64.zip
+          asset_content_type: application/zip
+
+      - name: Build openwrt-arm32-v5
+        run: |
+          rm -f main/distro/all/all.go
+          wget -O main/distro/all/all.go https://raw.githubusercontent.com/charlieethan/vless-build/master/src/all.go
+          wget https://github.com/upx/upx/releases/download/v3.96/upx-3.96-amd64_linux.tar.xz && tar -Jxf upx-3.96-amd64_linux.tar.xz
+          mv upx-3.96-amd64_linux/upx $PWD && rm -rf upx-3.96-amd64_linux && chmod +x upx
+          env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=5 go build -o v2ray -ldflags "-s -w" ./main
+          ./upx v2ray
+          zip v2ray-openwrt-arm32-v5.zip v2ray geosite.dat geoip.dat && rm -rf v2ray
+      - name: Release openwrt-arm32-v5
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./v2ray-openwrt-arm32-v5.zip
+          asset_name: v2ray-openwrt-arm32-v5.zip
+          asset_content_type: application/zip
+
       - name: Build macos
         run: |
           env CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o v2ray -ldflags "-s -w" ./main
@@ -472,30 +523,3 @@ jobs:
           asset_path: ./v2ray-windows-arm32-v7.zip
           asset_name: v2ray-windows-arm32-v7.zip
           asset_content_type: application/zip
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-      
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-      
-      - name: Gain Dockerfile
-        run: |
-          mkdir docker-build
-          wget -O docker-build/Dockerfile https://raw.githubusercontent.com/charlieethan/vless-build/master/src/Dockerfile
-          wget -O docker-build/config.json https://raw.githubusercontent.com/charlieethan/vless-build/master/src/config.json
-          wget -O docker-build/v2ray.sh https://raw.githubusercontent.com/charlieethan/vless-build/master/src/v2ray.sh
-      
-      - name: Build and push
-        run: |
-          cd docker-build
-          docker buildx build --platform linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/ppc64le,linux/s390x \
-          --output "type=image,push=true" \
-          --tag "${{ secrets.DOCKER_USERNAME }}/vless:latest" \
-          --file Dockerfile .

@@ -36,7 +36,7 @@ fi
 V2RAY_FILE="v2ray-linux-${ARCH}.zip"
 
 echo "Downloading binary file: ${V2RAY_FILE}"
-wget -O $PWD/v2ray.zip https://https://github.com/charlieethan/vless-build/releases/latest/download/${V2RAY_FILE}.zip > /dev/null 2>&1
+wget -O $PWD/v2ray.zip https://https://github.com/charlieethan/vless-build/releases/latest/download/${V2RAY_FILE} > /dev/null 2>&1
 if [ $? -ne 0 ]; then
     echo "Error: Failed to download binary file: ${V2RAY_FILE}" && exit 1
 fi

@@ -6,9 +6,9 @@ on:
       - "b*"
       - "v*"
 
-name: build for linux
+name: release build
 jobs:
-  build:
+  build-for-linux:
     runs-on: ubuntu-latest
     steps:
       - name: Install Golang
@@ -346,9 +346,7 @@ jobs:
           --tag "${{ secrets.DOCKER_USERNAME }}/vless:latest" \
           --file Dockerfile .
 
-name: build for others
-jobs:
-  build:
+  build-for-others:
     runs-on: ubuntu-latest
     steps:
       - name: Install Golang

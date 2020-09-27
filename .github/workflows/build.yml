@@ -1,7 +1,5 @@
 on:
   push:
-    branches:
-      - 'master'
     path-ignore:
       - 'src'
       - '**.md'

@@ -357,8 +357,8 @@ jobs:
 
       - name: Build linux-ppc64
         run: |
-          env CGO_ENABLED=0 GOOS=linux GOARCH=ppc64 go build -o v2ray -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=ppc64 go build -o v2ctl -tags confonly -ldflags "-s -w" ./infra/control/main
+          env CGO_ENABLED=0 GOOS=linux GOARCH=ppc64 GOPPC64=power8 go build -o v2ray -ldflags "-s -w" ./main
+          env CGO_ENABLED=0 GOOS=linux GOARCH=ppc64 GOPPC64=power8 go build -o v2ctl -tags confonly -ldflags "-s -w" ./infra/control/main
           chmod +x v2ray v2ctl
           zip v2ray-linux-ppc64.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
@@ -374,8 +374,8 @@ jobs:
 
       - name: Build linux-ppc64le
         run: |
-          env CGO_ENABLED=0 GOOS=linux GOARCH=ppc64le go build -o v2ray -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=ppc64le go build -o v2ctl -tags confonly -ldflags "-s -w" ./infra/control/main
+          env CGO_ENABLED=0 GOOS=linux GOARCH=ppc64le GOPPC64=power8 go build -o v2ray -ldflags "-s -w" ./main
+          env CGO_ENABLED=0 GOOS=linux GOARCH=ppc64le GOPPC64=power8 go build -o v2ctl -tags confonly -ldflags "-s -w" ./infra/control/main
           chmod +x v2ray v2ctl
           zip v2ray-linux-ppc64le.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
@@ -489,24 +489,7 @@ jobs:
           asset_path: ./v2ray-dragonfly-amd64.zip
           asset_name: v2ray-dragonfly-amd64.zip
           asset_content_type: application/zip
-          
-      - name: Build linux-riscv
-        run: |
-          env CGO_ENABLED=0 GOOS=linux GOARCH=riscv go build -o v2ray -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=riscv go build -o v2ctl -tags confonly -ldflags "-s -w" ./infra/control/main
-          chmod +x v2ray v2ctl
-          zip v2ray-linux-riscv.zip v2ray v2ctl geosite.dat geoip.dat
-          rm -rf v2ray v2ctl
-      - name: Release linux-riscv
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-linux-riscv.zip
-          asset_name: v2ray-linux-riscv.zip
-          asset_content_type: application/zip
-          
+
       - name: Build linux-riscv64
         run: |
           env CGO_ENABLED=0 GOOS=linux GOARCH=riscv64 go build -o v2ray -ldflags "-s -w" ./main
@@ -523,20 +506,37 @@ jobs:
           asset_path: ./v2ray-linux-riscv64.zip
           asset_name: v2ray-linux-riscv64.zip
           asset_content_type: application/zip
-          
-      - name: Build linux-s390
+
+      - name: Build linux-ppc64-power9
         run: |
-          env CGO_ENABLED=0 GOOS=linux GOARCH=s390 go build -o v2ray -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=s390 go build -o v2ctl -tags confonly -ldflags "-s -w" ./infra/control/main
+          env CGO_ENABLED=0 GOOS=linux GOARCH=ppc64 GOPPC64=power9 go build -o v2ray -ldflags "-s -w" ./main
+          env CGO_ENABLED=0 GOOS=linux GOARCH=ppc64 GOPPC64=power9 go build -o v2ctl -tags confonly -ldflags "-s -w" ./infra/control/main
           chmod +x v2ray v2ctl
-          zip v2ray-linux-s390.zip v2ray v2ctl geosite.dat geoip.dat
+          zip v2ray-linux-ppc64-power9.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
-      - name: Release linux-s390
+      - name: Release linux-ppc64-power9
         uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-linux-s390.zip
-          asset_name: v2ray-linux-s390.zip
+          asset_path: ./v2ray-linux-ppc64-power9.zip
+          asset_name: v2ray-linux-ppc64-power9.zip
+          asset_content_type: application/zip
+
+      - name: Build linux-ppc64le-power9
+        run: |
+          env CGO_ENABLED=0 GOOS=linux GOARCH=ppc64le GOPPC64=power9 go build -o v2ray -ldflags "-s -w" ./main
+          env CGO_ENABLED=0 GOOS=linux GOARCH=ppc64le GOPPC64=power9 go build -o v2ctl -tags confonly -ldflags "-s -w" ./infra/control/main
+          chmod +x v2ray v2ctl
+          zip v2ray-linux-ppc64le-power9.zip v2ray v2ctl geosite.dat geoip.dat
+          rm -rf v2ray v2ctl
+      - name: Release linux-ppc64le-power9
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./v2ray-linux-ppc64le-power9.zip
+          asset_name: v2ray-linux-ppc64le-power9.zip
           asset_content_type: application/zip

@@ -37,8 +37,7 @@ jobs:
           chmod +x v2ray v2ctl
           zip v2ray-linux-386.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
-      - name: Release linux-386
-        uses: actions/upload-release-asset@v1.0.2
+      - uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -54,8 +53,7 @@ jobs:
           chmod +x v2ray v2ctl
           zip v2ray-linux-amd64.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
-      - name: Release linux-amd64
-        uses: actions/upload-release-asset@v1.0.2
+      - uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -71,8 +69,7 @@ jobs:
           chmod +x v2ray v2ctl
           zip v2ray-freebsd-386.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
-      - name: Release freebsd-386
-        uses: actions/upload-release-asset@v1.0.2
+      - uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -88,8 +85,7 @@ jobs:
           chmod +x v2ray v2ctl
           zip v2ray-freebsd-amd64.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
-      - name: Release freebsd-amd64
-        uses: actions/upload-release-asset@v1.0.2
+      - uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -105,8 +101,7 @@ jobs:
           chmod +x v2ray v2ctl
           zip v2ray-openbsd-386.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
-      - name: Release openbsd-386
-        uses: actions/upload-release-asset@v1.0.2
+      - uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -122,8 +117,7 @@ jobs:
           chmod +x v2ray v2ctl
           zip v2ray-openbsd-amd64.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
-      - name: Release openbsd-amd64
-        uses: actions/upload-release-asset@v1.0.2
+      - uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -139,8 +133,7 @@ jobs:
           chmod +x v2ray v2ctl
           zip v2ray-linux-arm32-v5.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
-      - name: Release linux-arm32-v5
-        uses: actions/upload-release-asset@v1.0.2
+      - uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -158,8 +151,7 @@ jobs:
           env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=5 go build -o v2ray -ldflags "-s -w" ./main
           ./upx v2ray
           zip v2ray-openwrt-arm32-v5.zip v2ray geosite.dat geoip.dat && rm -rf v2ray
-      - name: Release openwrt-arm32-v5
-        uses: actions/upload-release-asset@v1.0.2
+      - uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -175,8 +167,7 @@ jobs:
           chmod +x v2ray v2ctl
           zip v2ray-linux-arm32-v6.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
-      - name: Release linux-arm32-v6
-        uses: actions/upload-release-asset@v1.0.2
+      - uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -192,8 +183,7 @@ jobs:
           chmod +x v2ray v2ctl
           zip v2ray-linux-arm32-v7.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
-      - name: Release linux-arm32-v7
-        uses: actions/upload-release-asset@v1.0.2
+      - uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -209,8 +199,7 @@ jobs:
           chmod +x v2ray v2ctl
           zip v2ray-linux-arm64.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
-      - name: Release linux-arm64
-        uses: actions/upload-release-asset@v1.0.2
+      - uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -226,8 +215,7 @@ jobs:
           chmod +x v2ray v2ctl
           zip v2ray-linux-mips-hardfloat.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
-      - name: Release linux-mips-hardfloat
-        uses: actions/upload-release-asset@v1.0.2
+      - uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -243,8 +231,7 @@ jobs:
           chmod +x v2ray v2ctl
           zip v2ray-linux-mips-softfloat.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
-      - name: Release linux-mips-softfloat
-        uses: actions/upload-release-asset@v1.0.2
+      - uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -260,8 +247,7 @@ jobs:
           chmod +x v2ray v2ctl
           zip v2ray-linux-mipsle-hardfloat.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
-      - name: Release linux-mipsle-hardfloat
-        uses: actions/upload-release-asset@v1.0.2
+      - uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -277,8 +263,7 @@ jobs:
           chmod +x v2ray v2ctl
           zip v2ray-linux-mipsle-softfloat.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
-      - name: Release linux-mipsle-softfloat
-        uses: actions/upload-release-asset@v1.0.2
+      - uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -294,8 +279,7 @@ jobs:
           chmod +x v2ray v2ctl
           zip v2ray-linux-mips64-hardfloat.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
-      - name: Release linux-mips64-hardfloat
-        uses: actions/upload-release-asset@v1.0.2
+      - uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -311,8 +295,7 @@ jobs:
           chmod +x v2ray v2ctl
           zip v2ray-linux-mips64-softfloat.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
-      - name: Release linux-mips64-softfloat
-        uses: actions/upload-release-asset@v1.0.2
+      - uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -328,8 +311,7 @@ jobs:
           chmod +x v2ray v2ctl
           zip v2ray-linux-mips64le-hardfloat.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
-      - name: Release linux-mips64le-hardfloat
-        uses: actions/upload-release-asset@v1.0.2
+      - uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -345,8 +327,7 @@ jobs:
           chmod +x v2ray v2ctl
           zip v2ray-linux-mips64le-softfloat.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
-      - name: Release linux-mips64le-softfloat
-        uses: actions/upload-release-asset@v1.0.2
+      - uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -362,8 +343,7 @@ jobs:
           chmod +x v2ray v2ctl
           zip v2ray-linux-ppc64.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
-      - name: Release linux-ppc64
-        uses: actions/upload-release-asset@v1.0.2
+      - uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -379,8 +359,7 @@ jobs:
           chmod +x v2ray v2ctl
           zip v2ray-linux-ppc64le.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
-      - name: Release linux-ppc64le
-        uses: actions/upload-release-asset@v1.0.2
+      - uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -396,8 +375,7 @@ jobs:
           chmod +x v2ray v2ctl
           zip v2ray-linux-s390x.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
-      - name: Release linux-s390x
-        uses: actions/upload-release-asset@v1.0.2
+      - uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -412,8 +390,7 @@ jobs:
           env CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o v2ctl -tags confonly -ldflags "-s -w" ./infra/control/main
           zip v2ray-macos.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
-      - name: Release macos
-        uses: actions/upload-release-asset@v1.0.2
+      - uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -429,8 +406,7 @@ jobs:
           env CGO_ENABLED=0 GOOS=windows GOARCH=386 go build -o v2ctl.exe -tags confonly -ldflags "-s -w" ./infra/control/main
           zip v2ray-windows-32.zip v2ray.exe v2ctl.exe wv2ray.exe geosite.dat geoip.dat
           rm -rf v2ray.exe v2ctl.exe wv2ray.exe
-      - name: Release windows-32
-        uses: actions/upload-release-asset@v1.0.2
+      - uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -446,8 +422,7 @@ jobs:
           env CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o v2ctl.exe -tags confonly -ldflags "-s -w" ./infra/control/main
           zip v2ray-windows-64.zip v2ray.exe v2ctl.exe wv2ray.exe geosite.dat geoip.dat
           rm -rf v2ray.exe v2ctl.exe wv2ray.exe
-      - name: Release windows-64
-        uses: actions/upload-release-asset@v1.0.2
+      - uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -463,8 +438,7 @@ jobs:
           env CGO_ENABLED=0 GOOS=windows GOARCH=arm GOARM=7 go build -o v2ctl.exe -tags confonly -ldflags "-s -w" ./infra/control/main
           zip v2ray-windows-arm32-v7.zip v2ray.exe v2ctl.exe wv2ray.exe geosite.dat geoip.dat
           rm -rf v2ray.exe v2ctl.exe wv2ray.exe
-      - name: Release windows-arm32-v7
-        uses: actions/upload-release-asset@v1.0.2
+      - uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -472,30 +446,67 @@ jobs:
           asset_path: ./v2ray-windows-arm32-v7.zip
           asset_name: v2ray-windows-arm32-v7.zip
           asset_content_type: application/zip
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-      
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
+          
+      - name: Build dragonfly-amd64
+        run: |
+          env CGO_ENABLED=0 GOOS=dragonfly GOARCH=amd64 go build -o v2ray -ldflags "-s -w" ./main
+          env CGO_ENABLED=0 GOOS=dragonfly GOARCH=amd64 go build -o v2ctl -tags confonly -ldflags "-s -w" ./infra/control/main
+          chmod +x v2ray v2ctl
+          zip v2ray-dragonfly-amd64.zip v2ray v2ctl geosite.dat geoip.dat
+          rm -rf v2ray v2ctl
+      - uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-      
-      - name: Gain Dockerfile
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./v2ray-dragonfly-amd64.zip
+          asset_name: v2ray-dragonfly-amd64.zip
+          asset_content_type: application/zip
+          
+      - name: Build linux-riscv
         run: |
-          mkdir docker-build
-          wget -O docker-build/Dockerfile https://raw.githubusercontent.com/charlieethan/vless-build/master/src/Dockerfile
-          wget -O docker-build/config.json https://raw.githubusercontent.com/charlieethan/vless-build/master/src/config.json
-          wget -O docker-build/v2ray.sh https://raw.githubusercontent.com/charlieethan/vless-build/master/src/v2ray.sh
-      
-      - name: Build and push
+          env CGO_ENABLED=0 GOOS=linux GOARCH=riscv go build -o v2ray -ldflags "-s -w" ./main
+          env CGO_ENABLED=0 GOOS=linux GOARCH=riscv go build -o v2ctl -tags confonly -ldflags "-s -w" ./infra/control/main
+          chmod +x v2ray v2ctl
+          zip v2ray-linux-riscv.zip v2ray v2ctl geosite.dat geoip.dat
+          rm -rf v2ray v2ctl
+      - uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./v2ray-linux-riscv.zip
+          asset_name: v2ray-linux-riscv.zip
+          asset_content_type: application/zip
+          
+      - name: Build linux-riscv64
         run: |
-          cd docker-build
-          docker buildx build --platform linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/ppc64le,linux/s390x \
-          --output "type=image,push=true" \
-          --tag "${{ secrets.DOCKER_USERNAME }}/vless:latest" \
-          --file Dockerfile .
+          env CGO_ENABLED=0 GOOS=linux GOARCH=riscv64 go build -o v2ray -ldflags "-s -w" ./main
+          env CGO_ENABLED=0 GOOS=linux GOARCH=riscv64 go build -o v2ctl -tags confonly -ldflags "-s -w" ./infra/control/main
+          chmod +x v2ray v2ctl
+          zip v2ray-linux-riscv64.zip v2ray v2ctl geosite.dat geoip.dat
+          rm -rf v2ray v2ctl
+      - uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./v2ray-linux-riscv64.zip
+          asset_name: v2ray-linux-riscv64.zip
+          asset_content_type: application/zip
+          
+      - name: Build linux-s390
+        run: |
+          env CGO_ENABLED=0 GOOS=linux GOARCH=s390 go build -o v2ray -ldflags "-s -w" ./main
+          env CGO_ENABLED=0 GOOS=linux GOARCH=s390 go build -o v2ctl -tags confonly -ldflags "-s -w" ./infra/control/main
+          chmod +x v2ray v2ctl
+          zip v2ray-linux-s390.zip v2ray v2ctl geosite.dat geoip.dat
+          rm -rf v2ray v2ctl
+      - uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./v2ray-linux-s390.zip
+          asset_name: v2ray-linux-s390.zip
+          asset_content_type: application/zip

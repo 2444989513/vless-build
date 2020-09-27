@@ -2,7 +2,7 @@
 
 PLATFORM=$1
 if [ -z "$PLATFORM" ]; then
-    ARCH="amd64"
+    ARCH="64"
 else
     case "$PLATFORM" in
         linux/386)

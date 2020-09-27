@@ -38,6 +38,7 @@ jobs:
           zip v2ray-linux-386.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
       - uses: actions/upload-release-asset@v1.0.2
+        name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -54,6 +55,7 @@ jobs:
           zip v2ray-linux-amd64.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
       - uses: actions/upload-release-asset@v1.0.2
+        name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -70,6 +72,7 @@ jobs:
           zip v2ray-freebsd-386.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
       - uses: actions/upload-release-asset@v1.0.2
+        name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -86,6 +89,7 @@ jobs:
           zip v2ray-freebsd-amd64.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
       - uses: actions/upload-release-asset@v1.0.2
+        name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -102,6 +106,7 @@ jobs:
           zip v2ray-openbsd-386.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
       - uses: actions/upload-release-asset@v1.0.2
+        name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -118,6 +123,7 @@ jobs:
           zip v2ray-openbsd-amd64.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
       - uses: actions/upload-release-asset@v1.0.2
+        name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -134,6 +140,7 @@ jobs:
           zip v2ray-linux-arm32-v5.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
       - uses: actions/upload-release-asset@v1.0.2
+        name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -152,6 +159,7 @@ jobs:
           ./upx v2ray
           zip v2ray-openwrt-arm32-v5.zip v2ray geosite.dat geoip.dat && rm -rf v2ray
       - uses: actions/upload-release-asset@v1.0.2
+        name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -168,6 +176,7 @@ jobs:
           zip v2ray-linux-arm32-v6.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
       - uses: actions/upload-release-asset@v1.0.2
+        name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -184,6 +193,7 @@ jobs:
           zip v2ray-linux-arm32-v7.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
       - uses: actions/upload-release-asset@v1.0.2
+        name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -200,6 +210,7 @@ jobs:
           zip v2ray-linux-arm64.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
       - uses: actions/upload-release-asset@v1.0.2
+        name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -216,6 +227,7 @@ jobs:
           zip v2ray-linux-mips-hardfloat.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
       - uses: actions/upload-release-asset@v1.0.2
+        name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -232,6 +244,7 @@ jobs:
           zip v2ray-linux-mips-softfloat.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
       - uses: actions/upload-release-asset@v1.0.2
+        name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -248,6 +261,7 @@ jobs:
           zip v2ray-linux-mipsle-hardfloat.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
       - uses: actions/upload-release-asset@v1.0.2
+        name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -264,6 +278,7 @@ jobs:
           zip v2ray-linux-mipsle-softfloat.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
       - uses: actions/upload-release-asset@v1.0.2
+        name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -280,6 +295,7 @@ jobs:
           zip v2ray-linux-mips64-hardfloat.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
       - uses: actions/upload-release-asset@v1.0.2
+        name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -296,6 +312,7 @@ jobs:
           zip v2ray-linux-mips64-softfloat.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
       - uses: actions/upload-release-asset@v1.0.2
+        name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -312,6 +329,7 @@ jobs:
           zip v2ray-linux-mips64le-hardfloat.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
       - uses: actions/upload-release-asset@v1.0.2
+        name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -328,6 +346,7 @@ jobs:
           zip v2ray-linux-mips64le-softfloat.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
       - uses: actions/upload-release-asset@v1.0.2
+        name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -344,6 +363,7 @@ jobs:
           zip v2ray-linux-ppc64.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
       - uses: actions/upload-release-asset@v1.0.2
+        name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -360,6 +380,7 @@ jobs:
           zip v2ray-linux-ppc64le.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
       - uses: actions/upload-release-asset@v1.0.2
+        name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -376,6 +397,7 @@ jobs:
           zip v2ray-linux-s390x.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
       - uses: actions/upload-release-asset@v1.0.2
+        name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -391,6 +413,7 @@ jobs:
           zip v2ray-macos.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
       - uses: actions/upload-release-asset@v1.0.2
+        name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -407,6 +430,7 @@ jobs:
           zip v2ray-windows-32.zip v2ray.exe v2ctl.exe wv2ray.exe geosite.dat geoip.dat
           rm -rf v2ray.exe v2ctl.exe wv2ray.exe
       - uses: actions/upload-release-asset@v1.0.2
+        name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -423,6 +447,7 @@ jobs:
           zip v2ray-windows-64.zip v2ray.exe v2ctl.exe wv2ray.exe geosite.dat geoip.dat
           rm -rf v2ray.exe v2ctl.exe wv2ray.exe
       - uses: actions/upload-release-asset@v1.0.2
+        name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -439,6 +464,7 @@ jobs:
           zip v2ray-windows-arm32-v7.zip v2ray.exe v2ctl.exe wv2ray.exe geosite.dat geoip.dat
           rm -rf v2ray.exe v2ctl.exe wv2ray.exe
       - uses: actions/upload-release-asset@v1.0.2
+        name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -455,6 +481,7 @@ jobs:
           zip v2ray-dragonfly-amd64.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
       - uses: actions/upload-release-asset@v1.0.2
+        name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -471,6 +498,7 @@ jobs:
           zip v2ray-linux-riscv.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
       - uses: actions/upload-release-asset@v1.0.2
+        name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -487,6 +515,7 @@ jobs:
           zip v2ray-linux-riscv64.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
       - uses: actions/upload-release-asset@v1.0.2
+        name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -503,6 +532,7 @@ jobs:
           zip v2ray-linux-s390.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
       - uses: actions/upload-release-asset@v1.0.2
+        name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:

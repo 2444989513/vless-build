@@ -6,22 +6,22 @@ if [ -z "$PLATFORM" ]; then
 else
     case "$PLATFORM" in
         linux/386)
-            ARCH="386"
+            ARCH="32"
             ;;
         linux/amd64)
-            ARCH="amd64"
+            ARCH="64"
             ;;
         linux/arm/v6)
             ARCH="arm32-v6"
             ;;
         linux/arm/v7)
-            ARCH="arm32-v7"
+            ARCH="arm32-v7a"
             ;;
         linux/arm64|linux/arm64/v8)
-            ARCH="arm64"
+            ARCH="arm64-v8a"
             ;;
         linux/ppc64le)
-            ARCH="ppc64le"
+            ARCH="ppc64le-power8"
             ;;
         linux/s390x)
             ARCH="s390x"

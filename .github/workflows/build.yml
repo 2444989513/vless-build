@@ -36,7 +36,7 @@ jobs:
       - name: Build linux-32
         run: |
           env CGO_ENABLED=0 GOOS=linux GOARCH=386 go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=386 go build -o v2ctl -trimpath -tags confonly -ldflags "-s -w" ./infra/control/main
+          env CGO_ENABLED=0 GOOS=linux GOARCH=386 go build -o v2ctl -trimpath -ldflags confonly -tags "-s -w" ./infra/control/main
           chmod +x v2ray v2ctl
           zip v2ray-linux-32.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
@@ -53,7 +53,7 @@ jobs:
       - name: Build linux-64
         run: |
           env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o v2ctl -trimpath -tags confonly -ldflags "-s -w" ./infra/control/main
+          env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o v2ctl -trimpath -ldflags confonly -tags "-s -w" ./infra/control/main
           chmod +x v2ray v2ctl
           zip v2ray-linux-64.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
@@ -70,7 +70,7 @@ jobs:
       - name: Build freebsd-32
         run: |
           env CGO_ENABLED=0 GOOS=freebsd GOARCH=386 go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=freebsd GOARCH=386 go build -o v2ctl -trimpath -tags confonly -ldflags "-s -w" ./infra/control/main
+          env CGO_ENABLED=0 GOOS=freebsd GOARCH=386 go build -o v2ctl -trimpath -ldflags confonly -tags "-s -w" ./infra/control/main
           chmod +x v2ray v2ctl
           zip v2ray-freebsd-32.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
@@ -87,7 +87,7 @@ jobs:
       - name: Build freebsd-64
         run: |
           env CGO_ENABLED=0 GOOS=freebsd GOARCH=amd64 go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=freebsd GOARCH=amd64 go build -o v2ctl -trimpath -tags confonly -ldflags "-s -w" ./infra/control/main
+          env CGO_ENABLED=0 GOOS=freebsd GOARCH=amd64 go build -o v2ctl -trimpath -ldflags confonly -tags "-s -w" ./infra/control/main
           chmod +x v2ray v2ctl
           zip v2ray-freebsd-64.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
@@ -104,7 +104,7 @@ jobs:
       - name: Build openbsd-32
         run: |
           env CGO_ENABLED=0 GOOS=openbsd GOARCH=386 go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=openbsd GOARCH=386 go build -o v2ctl -trimpath -tags confonly -ldflags "-s -w" ./infra/control/main
+          env CGO_ENABLED=0 GOOS=openbsd GOARCH=386 go build -o v2ctl -trimpath -ldflags confonly -tags "-s -w" ./infra/control/main
           chmod +x v2ray v2ctl
           zip v2ray-openbsd-32.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
@@ -121,7 +121,7 @@ jobs:
       - name: Build openbsd-64
         run: |
           env CGO_ENABLED=0 GOOS=openbsd GOARCH=amd64 go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=openbsd GOARCH=amd64 go build -o v2ctl -trimpath -tags confonly -ldflags "-s -w" ./infra/control/main
+          env CGO_ENABLED=0 GOOS=openbsd GOARCH=amd64 go build -o v2ctl -trimpath -ldflags confonly -tags "-s -w" ./infra/control/main
           chmod +x v2ray v2ctl
           zip v2ray-openbsd-64.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
@@ -138,7 +138,7 @@ jobs:
       - name: Build linux-arm32-v5
         run: |
           env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=5 go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=5 go build -o v2ctl -trimpath -tags confonly -ldflags "-s -w" ./infra/control/main
+          env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=5 go build -o v2ctl -trimpath -ldflags confonly -tags "-s -w" ./infra/control/main
           chmod +x v2ray v2ctl
           zip v2ray-linux-arm32-v5.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
@@ -155,7 +155,7 @@ jobs:
       - name: Build linux-arm32-v6
         run: |
           env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=6 go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=6 go build -o v2ctl -trimpath -tags confonly -ldflags "-s -w" ./infra/control/main
+          env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=6 go build -o v2ctl -trimpath -ldflags confonly -tags "-s -w" ./infra/control/main
           chmod +x v2ray v2ctl
           zip v2ray-linux-arm32-v6.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
@@ -172,7 +172,7 @@ jobs:
       - name: Build linux-arm32-v7a
         run: |
           env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 go build -o v2ctl -trimpath -tags confonly -ldflags "-s -w" ./infra/control/main
+          env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 go build -o v2ctl -trimpath -ldflags confonly -tags "-s -w" ./infra/control/main
           chmod +x v2ray v2ctl
           zip v2ray-linux-arm32-v7a.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
@@ -189,7 +189,7 @@ jobs:
       - name: Build linux-arm64-v8a
         run: |
           env CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o v2ctl -trimpath -tags confonly -ldflags "-s -w" ./infra/control/main
+          env CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o v2ctl -trimpath -ldflags confonly -tags "-s -w" ./infra/control/main
           chmod +x v2ray v2ctl
           zip v2ray-linux-arm64-v8a.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
@@ -206,7 +206,7 @@ jobs:
       - name: Build linux-mips32-hardfloat
         run: |
           env CGO_ENABLED=0 GOOS=linux GOARCH=mips GOMIPS=hardfloat go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=mips GOMIPS=hardfloat go build -o v2ctl -trimpath -tags confonly -ldflags "-s -w" ./infra/control/main
+          env CGO_ENABLED=0 GOOS=linux GOARCH=mips GOMIPS=hardfloat go build -o v2ctl -trimpath -ldflags confonly -tags "-s -w" ./infra/control/main
           chmod +x v2ray v2ctl
           zip v2ray-linux-mips32-hardfloat.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
@@ -223,7 +223,7 @@ jobs:
       - name: Build linux-mips32-softfloat
         run: |
           env CGO_ENABLED=0 GOOS=linux GOARCH=mips GOMIPS=softfloat go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=mips GOMIPS=softfloat go build -o v2ctl -trimpath -tags confonly -ldflags "-s -w" ./infra/control/main
+          env CGO_ENABLED=0 GOOS=linux GOARCH=mips GOMIPS=softfloat go build -o v2ctl -trimpath -ldflags confonly -tags "-s -w" ./infra/control/main
           chmod +x v2ray v2ctl
           zip v2ray-linux-mips32-softfloat.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
@@ -240,7 +240,7 @@ jobs:
       - name: Build linux-mips32le-hardfloat
         run: |
           env CGO_ENABLED=0 GOOS=linux GOARCH=mipsle GOMIPS=hardfloat go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=mipsle GOMIPS=hardfloat go build -o v2ctl -trimpath -tags confonly -ldflags "-s -w" ./infra/control/main
+          env CGO_ENABLED=0 GOOS=linux GOARCH=mipsle GOMIPS=hardfloat go build -o v2ctl -trimpath -ldflags confonly -tags "-s -w" ./infra/control/main
           chmod +x v2ray v2ctl
           zip v2ray-linux-mips32le-hardfloat.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
@@ -257,7 +257,7 @@ jobs:
       - name: Build linux-mips32le-softfloat
         run: |
           env CGO_ENABLED=0 GOOS=linux GOARCH=mipsle GOMIPS=softfloat go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=mipsle GOMIPS=softfloat go build -o v2ctl -trimpath -tags confonly -ldflags "-s -w" ./infra/control/main
+          env CGO_ENABLED=0 GOOS=linux GOARCH=mipsle GOMIPS=softfloat go build -o v2ctl -trimpath -ldflags confonly -tags "-s -w" ./infra/control/main
           chmod +x v2ray v2ctl
           zip v2ray-linux-mips32le-softfloat.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
@@ -274,7 +274,7 @@ jobs:
       - name: Build linux-mips64-hardfloat
         run: |
           env CGO_ENABLED=0 GOOS=linux GOARCH=mips64 GOMIPS64=hardfloat go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=mips64 GOMIPS64=hardfloat go build -o v2ctl -trimpath -tags confonly -ldflags "-s -w" ./infra/control/main
+          env CGO_ENABLED=0 GOOS=linux GOARCH=mips64 GOMIPS64=hardfloat go build -o v2ctl -trimpath -ldflags confonly -tags "-s -w" ./infra/control/main
           chmod +x v2ray v2ctl
           zip v2ray-linux-mips64-hardfloat.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
@@ -291,7 +291,7 @@ jobs:
       - name: Build linux-mips64-softfloat
         run: |
           env CGO_ENABLED=0 GOOS=linux GOARCH=mips64 GOMIPS64=softfloat go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=mips64 GOMIPS64=softfloat go build -o v2ctl -trimpath -tags confonly -ldflags "-s -w" ./infra/control/main
+          env CGO_ENABLED=0 GOOS=linux GOARCH=mips64 GOMIPS64=softfloat go build -o v2ctl -trimpath -ldflags confonly -tags "-s -w" ./infra/control/main
           chmod +x v2ray v2ctl
           zip v2ray-linux-mips64-softfloat.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
@@ -308,7 +308,7 @@ jobs:
       - name: Build linux-mips64le-hardfloat
         run: |
           env CGO_ENABLED=0 GOOS=linux GOARCH=mips64le GOMIPS64=hardfloat go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=mips64le GOMIPS64=hardfloat go build -o v2ctl -trimpath -tags confonly -ldflags "-s -w" ./infra/control/main
+          env CGO_ENABLED=0 GOOS=linux GOARCH=mips64le GOMIPS64=hardfloat go build -o v2ctl -trimpath -ldflags confonly -tags "-s -w" ./infra/control/main
           chmod +x v2ray v2ctl
           zip v2ray-linux-mips64le-hardfloat.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
@@ -325,7 +325,7 @@ jobs:
       - name: Build linux-mips64le-softfloat
         run: |
           env CGO_ENABLED=0 GOOS=linux GOARCH=mips64le GOMIPS64=softfloat go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=mips64le GOMIPS64=softfloat go build -o v2ctl -trimpath -tags confonly -ldflags "-s -w" ./infra/control/main
+          env CGO_ENABLED=0 GOOS=linux GOARCH=mips64le GOMIPS64=softfloat go build -o v2ctl -trimpath -ldflags confonly -tags "-s -w" ./infra/control/main
           chmod +x v2ray v2ctl
           zip v2ray-linux-mips64le-softfloat.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
@@ -342,7 +342,7 @@ jobs:
       - name: Build linux-ppc64-power8
         run: |
           env CGO_ENABLED=0 GOOS=linux GOARCH=ppc64 GOPPC64=power8 go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=ppc64 GOPPC64=power8 go build -o v2ctl -trimpath -tags confonly -ldflags "-s -w" ./infra/control/main
+          env CGO_ENABLED=0 GOOS=linux GOARCH=ppc64 GOPPC64=power8 go build -o v2ctl -trimpath -ldflags confonly -tags "-s -w" ./infra/control/main
           chmod +x v2ray v2ctl
           zip v2ray-linux-ppc64-power8.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
@@ -359,7 +359,7 @@ jobs:
       - name: Build linux-ppc64le-power8
         run: |
           env CGO_ENABLED=0 GOOS=linux GOARCH=ppc64le GOPPC64=power8 go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=ppc64le GOPPC64=power8 go build -o v2ctl -trimpath -tags confonly -ldflags "-s -w" ./infra/control/main
+          env CGO_ENABLED=0 GOOS=linux GOARCH=ppc64le GOPPC64=power8 go build -o v2ctl -trimpath -ldflags confonly -tags "-s -w" ./infra/control/main
           chmod +x v2ray v2ctl
           zip v2ray-linux-ppc64le-power8.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
@@ -376,7 +376,7 @@ jobs:
       - name: Build linux-s390x
         run: |
           env CGO_ENABLED=0 GOOS=linux GOARCH=s390x go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=s390x go build -o v2ctl -trimpath -tags confonly -ldflags "-s -w" ./infra/control/main
+          env CGO_ENABLED=0 GOOS=linux GOARCH=s390x go build -o v2ctl -trimpath -ldflags confonly -tags "-s -w" ./infra/control/main
           chmod +x v2ray v2ctl
           zip v2ray-linux-s390x.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
@@ -393,7 +393,7 @@ jobs:
       - name: Build macos-64
         run: |
           env CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o v2ctl -trimpath -tags confonly -ldflags "-s -w" ./infra/control/main
+          env CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o v2ctl -trimpath -ldflags confonly -tags "-s -w" ./infra/control/main
           zip v2ray-macos-64.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
       - name: Release macos-64
@@ -410,7 +410,7 @@ jobs:
         run: |
           env CGO_ENABLED=0 GOOS=windows GOARCH=386 go build -o v2ray.exe -trimpath -ldflags "-s -w" ./main
           env CGO_ENABLED=0 GOOS=windows GOARCH=386 go build -o wv2ray.exe -trimpath -ldflags "-s -w -H windowsgui" ./main
-          env CGO_ENABLED=0 GOOS=windows GOARCH=386 go build -o v2ctl.exe -trimpath -tags confonly -ldflags "-s -w" ./infra/control/main
+          env CGO_ENABLED=0 GOOS=windows GOARCH=386 go build -o v2ctl.exe -trimpath -ldflags confonly -tags "-s -w" ./infra/control/main
           zip v2ray-windows-32.zip v2ray.exe v2ctl.exe wv2ray.exe geosite.dat geoip.dat
           rm -rf v2ray.exe v2ctl.exe wv2ray.exe
       - name: Release windows-32
@@ -427,7 +427,7 @@ jobs:
         run: |
           env CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o v2ray.exe -trimpath -ldflags "-s -w" ./main
           env CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o wv2ray.exe -trimpath -ldflags "-s -w -H windowsgui" ./main
-          env CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o v2ctl.exe -trimpath -tags confonly -ldflags "-s -w" ./infra/control/main
+          env CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o v2ctl.exe -trimpath -ldflags confonly -tags "-s -w" ./infra/control/main
           zip v2ray-windows-64.zip v2ray.exe v2ctl.exe wv2ray.exe geosite.dat geoip.dat
           rm -rf v2ray.exe v2ctl.exe wv2ray.exe
       - name: Release windows-64
@@ -444,7 +444,7 @@ jobs:
         run: |
           env CGO_ENABLED=0 GOOS=windows GOARCH=arm GOARM=7 go build -o v2ray.exe -trimpath -ldflags "-s -w" ./main
           env CGO_ENABLED=0 GOOS=windows GOARCH=arm GOARM=7 go build -o wv2ray.exe -trimpath -ldflags "-s -w -H windowsgui" ./main
-          env CGO_ENABLED=0 GOOS=windows GOARCH=arm GOARM=7 go build -o v2ctl.exe -trimpath -tags confonly -ldflags "-s -w" ./infra/control/main
+          env CGO_ENABLED=0 GOOS=windows GOARCH=arm GOARM=7 go build -o v2ctl.exe -trimpath -ldflags confonly -tags "-s -w" ./infra/control/main
           zip v2ray-windows-arm32-v7a.zip v2ray.exe v2ctl.exe wv2ray.exe geosite.dat geoip.dat
           rm -rf v2ray.exe v2ctl.exe wv2ray.exe
       - name: Release windows-arm32-v7a
@@ -460,7 +460,7 @@ jobs:
       - name: Build dragonfly-64
         run: |
           env CGO_ENABLED=0 GOOS=dragonfly GOARCH=amd64 go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=dragonfly GOARCH=amd64 go build -o v2ctl -trimpath -tags confonly -ldflags "-s -w" ./infra/control/main
+          env CGO_ENABLED=0 GOOS=dragonfly GOARCH=amd64 go build -o v2ctl -trimpath -ldflags confonly -tags "-s -w" ./infra/control/main
           chmod +x v2ray v2ctl
           zip v2ray-dragonfly-64.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
@@ -477,7 +477,7 @@ jobs:
       - name: Build linux-riscv64
         run: |
           env CGO_ENABLED=0 GOOS=linux GOARCH=riscv64 go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=riscv64 go build -o v2ctl -trimpath -tags confonly -ldflags "-s -w" ./infra/control/main
+          env CGO_ENABLED=0 GOOS=linux GOARCH=riscv64 go build -o v2ctl -trimpath -ldflags confonly -tags "-s -w" ./infra/control/main
           chmod +x v2ray v2ctl
           zip v2ray-linux-riscv64.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
@@ -494,7 +494,7 @@ jobs:
       - name: Build linux-ppc64-power9
         run: |
           env CGO_ENABLED=0 GOOS=linux GOARCH=ppc64 GOPPC64=power9 go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=ppc64 GOPPC64=power9 go build -o v2ctl -trimpath -tags confonly -ldflags "-s -w" ./infra/control/main
+          env CGO_ENABLED=0 GOOS=linux GOARCH=ppc64 GOPPC64=power9 go build -o v2ctl -trimpath -ldflags confonly -tags "-s -w" ./infra/control/main
           chmod +x v2ray v2ctl
           zip v2ray-linux-ppc64-power9.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl
@@ -511,7 +511,7 @@ jobs:
       - name: Build linux-ppc64le-power9
         run: |
           env CGO_ENABLED=0 GOOS=linux GOARCH=ppc64le GOPPC64=power9 go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=ppc64le GOPPC64=power9 go build -o v2ctl -trimpath -tags confonly -ldflags "-s -w" ./infra/control/main
+          env CGO_ENABLED=0 GOOS=linux GOARCH=ppc64le GOPPC64=power9 go build -o v2ctl -trimpath -ldflags confonly -tags "-s -w" ./infra/control/main
           chmod +x v2ray v2ctl
           zip v2ray-linux-ppc64le-power9.zip v2ray v2ctl geosite.dat geoip.dat
           rm -rf v2ray v2ctl

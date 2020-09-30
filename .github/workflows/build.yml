@@ -1,6 +1,6 @@
 on:
   push:
-    path-ignore:
+    paths-ignore: 
       - 'src'
       - '**.md'
     tags: 
@@ -26,7 +26,7 @@ jobs:
 
       - name: Create Release
         id: create_release
-        uses: monkeyWie/create-release@master
+        uses: actions/create-release@v1.1.4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -576,6 +576,11 @@ jobs:
           asset_path: ./v2ray-openwrt-mips32le-softfloat.zip
           asset_name: v2ray-openwrt-mips32le-softfloat.zip
           asset_content_type: application/zip
+          
+  push:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -591,21 +596,19 @@ jobs:
       
       - name: Gain Dockerfile
         run: |
-          mkdir docker-build
           wget -O docker-build/Dockerfile https://raw.githubusercontent.com/charlieethan/vless-build/master/src/Dockerfile
           wget -O docker-build/config.json https://raw.githubusercontent.com/charlieethan/vless-build/master/src/config.json
           wget -O docker-build/v2ray.sh https://raw.githubusercontent.com/charlieethan/vless-build/master/src/v2ray.sh
       
       - name: Build and push
         run: |
-          cd docker-build
           docker buildx build --platform linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/ppc64le,linux/s390x \
           --output "type=image,push=true" \
           --tag "${{ secrets.DOCKER_USERNAME }}/vless:latest" \
           --file Dockerfile .
 
   test:
-    needs: build
+    needs: [build,push]
     runs-on: ubuntu-latest
     steps:
       - name: Test Docker image

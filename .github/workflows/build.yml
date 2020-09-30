@@ -596,9 +596,9 @@ jobs:
       
       - name: Gain Dockerfile
         run: |
-          wget -O docker-build/Dockerfile https://raw.githubusercontent.com/charlieethan/vless-build/master/src/Dockerfile
-          wget -O docker-build/config.json https://raw.githubusercontent.com/charlieethan/vless-build/master/src/config.json
-          wget -O docker-build/v2ray.sh https://raw.githubusercontent.com/charlieethan/vless-build/master/src/v2ray.sh
+          wget -O Dockerfile https://raw.githubusercontent.com/charlieethan/vless-build/master/src/Dockerfile
+          wget -O config.json https://raw.githubusercontent.com/charlieethan/vless-build/master/src/config.json
+          wget -O v2ray.sh https://raw.githubusercontent.com/charlieethan/vless-build/master/src/v2ray.sh
       
       - name: Build and push
         run: |

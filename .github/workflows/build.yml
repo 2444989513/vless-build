@@ -1,23 +1,33 @@
 on:
+  watch:
+   type: started
   push:
-    paths-ignore: 
-      - 'src'
-      - '**.md'
-    tags: 
-      - "x*"
-      - "p*"
-      - "b*"
+   tags: 	
+      - "x*"	
+      - "p*"	
+      - "b*"	
       - "v*"
 
 name: release-build
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      TZ: Asia/Shanghai
+    if: github.actor == 'rprx'
     steps:
+
       - name: Install Golang
         uses: actions/setup-go@v2
         with: 
           go-version: 1.15.x
+
+      - name: Set variables
+        run: |
+          echo "::set-env name=RELEASE_NAME::构建于 $(date +%Y-%m-%d,%H:%M)"
+          echo "::set-env name=TAG_NAME::$(date +%m%d%H%M)"
+        shell: bash
+
       - name: Get code
         run: |
           git clone https://github.com/rprx/v2ray-vless.git && mv v2ray-vless/* $PWD && rm -rf v2ray-vless
@@ -30,8 +40,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
+          tag_name: ${{ env.TAG_NAME }}
+          release_name: ${{ env.RELEASE_NAME }}
 
       - name: Build linux-32
         run: |

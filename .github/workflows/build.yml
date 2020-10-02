@@ -1,12 +1,10 @@
 on:
-  watch:
-   type: started
   push:
-   tags: 	
-      - "x*"	
-      - "p*"	
-      - "b*"	
-      - "v*"
+    branches: 
+      - 'master'
+    paths-ignore:
+      - 'src'
+      - '**.md'
 
 name: release-build
 jobs:
@@ -14,7 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TZ: Asia/Shanghai
-    if: github.actor == 'rprx'
     steps:
 
       - name: Install Golang
@@ -24,8 +21,7 @@ jobs:
 
       - name: Set variables
         run: |
-          echo "::set-env name=RELEASE_NAME::构建于 $(date +%Y-%m-%d,%H:%M)"
-          echo "::set-env name=TAG_NAME::$(date +%m%d%H%M)"
+          echo "::set-env name=VERSION::$(wget --no-check-certificate -qO- https://raw.githubusercontent.com/charlieethan/vless-build/master/version | head -1)"
         shell: bash
 
       - name: Get code
@@ -40,8 +36,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ env.TAG_NAME }}
-          release_name: ${{ env.RELEASE_NAME }}
+          tag_name: ${{ env.VERSION }}
+          release_name: ${{ env.VERSION }}
 
       - name: Build linux-32
         run: |

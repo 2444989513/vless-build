@@ -5,6 +5,7 @@ on:
     paths-ignore:
       - 'src'
       - '**.md'
+      - '**.yml'
 
 name: release-build
 jobs:
@@ -21,7 +22,7 @@ jobs:
 
       - name: Set variables
         run: |
-          echo "::set-env name=VERSION::$(wget --no-check-certificate -qO- https://raw.githubusercontent.com/charlieethan/vless-build/master/version | head -1)"
+          echo "VERSION=$(wget --no-check-certificate -qO- https://raw.githubusercontent.com/charlieethan/vless-build/master/version | head -1)" >> $GITHUB_ENV
         shell: bash
 
       - name: Get code

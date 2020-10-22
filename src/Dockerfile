@@ -2,6 +2,7 @@ FROM --platform=${TARGETPLATFORM} alpine:latest
 LABEL maintainer="charlieethan <admin@charlieethan.com>"
 
 WORKDIR /root
+ARG TARGETPLATFORM
 COPY v2ray.sh /root/v2ray.sh
 COPY config.json /etc/v2ray/config.json
 RUN set -ex \

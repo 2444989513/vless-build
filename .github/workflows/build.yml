@@ -1,11 +1,7 @@
 on:
   push:
-    branches: 
-      - 'master'
-    paths-ignore:
-      - 'src'
-      - '**.md'
-      - '**.yml'
+    paths:
+      - 'version'
 
 name: release-build
 jobs:

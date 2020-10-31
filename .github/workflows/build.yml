@@ -7,9 +7,13 @@ name: release-build
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      TZ: Asia/Shanghai
     steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Bazel
+        uses: abhinavsingh/setup-bazel@v3
 
       - name: Install Golang
         uses: actions/setup-go@v2
@@ -18,570 +22,51 @@ jobs:
 
       - name: Set variables
         run: |
-          echo "VERSION=$(wget --no-check-certificate -qO- https://raw.githubusercontent.com/charlieethan/vless-build/master/version | head -1)" >> $GITHUB_ENV
+          echo "VERSION=$(cat version | head -1 | tr -d [:space:])" >> $GITHUB_ENV
+          echo "GOPATH=$(dirname $GITHUB_WORKSPACE)" >> $GITHUB_ENV
+          echo "$(dirname $GITHUB_WORKSPACE)/bin" >> $GITHUB_PATH
+          echo "PATH=$GOPATH/bin" >> $GITHUB_PATH
         shell: bash
 
-      - name: Get code
+      - name: Start Build
         run: |
-          git clone https://github.com/rprx/v2ray-vless.git && mv v2ray-vless/* $PWD && rm -rf v2ray-vless
-          wget -O geosite.dat https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat
-          wget -O geoip.dat https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat
+          git clone https://github.com/rprx/v2ray-vless.git && cd v2ray-vless
+          bazel build --action_env=PATH=$PATH \
+          --action_env=GOPATH=$(go env GOPATH) \
+          --action_env=GOCACHE=$(go env GOCACHE) \
+          --action_env=SPWD=$PWD \
+          --spawn_strategy local \
+          //release:all
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1.1.4
+      - name: Prepare
+        run: |
+          mkdir -p release
+          cp v2ray-vless/bazel-bin/release/v2ray-* release/
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          name: ${{ env.VERSION }}
           tag_name: ${{ env.VERSION }}
-          release_name: ${{ env.VERSION }}
-
-      - name: Build linux-32
-        run: |
-          env CGO_ENABLED=0 GOOS=linux GOARCH=386 go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=386 go build -o v2ctl -trimpath -ldflags "-s -w" -tags confonly ./infra/control/main
-          chmod +x v2ray v2ctl
-          zip v2ray-linux-32.zip v2ray v2ctl geosite.dat geoip.dat
-          rm -rf v2ray v2ctl
-      - name: Release linux-32
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-linux-32.zip
-          asset_name: v2ray-linux-32.zip
-          asset_content_type: application/zip
-
-      - name: Build linux-64
-        run: |
-          env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o v2ctl -trimpath -ldflags "-s -w" -tags confonly ./infra/control/main
-          chmod +x v2ray v2ctl
-          zip v2ray-linux-64.zip v2ray v2ctl geosite.dat geoip.dat
-          rm -rf v2ray v2ctl
-      - name: Release linux-64
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-linux-64.zip
-          asset_name: v2ray-linux-64.zip
-          asset_content_type: application/zip
-
-      - name: Build freebsd-32
-        run: |
-          env CGO_ENABLED=0 GOOS=freebsd GOARCH=386 go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=freebsd GOARCH=386 go build -o v2ctl -trimpath -ldflags "-s -w" -tags confonly ./infra/control/main
-          chmod +x v2ray v2ctl
-          zip v2ray-freebsd-32.zip v2ray v2ctl geosite.dat geoip.dat
-          rm -rf v2ray v2ctl
-      - name: Release freebsd-32
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-freebsd-32.zip
-          asset_name: v2ray-freebsd-32.zip
-          asset_content_type: application/zip
-
-      - name: Build freebsd-64
-        run: |
-          env CGO_ENABLED=0 GOOS=freebsd GOARCH=amd64 go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=freebsd GOARCH=amd64 go build -o v2ctl -trimpath -ldflags "-s -w" -tags confonly ./infra/control/main
-          chmod +x v2ray v2ctl
-          zip v2ray-freebsd-64.zip v2ray v2ctl geosite.dat geoip.dat
-          rm -rf v2ray v2ctl
-      - name: Release freebsd-64
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-freebsd-64.zip
-          asset_name: v2ray-freebsd-64.zip
-          asset_content_type: application/zip
-
-      - name: Build openbsd-32
-        run: |
-          env CGO_ENABLED=0 GOOS=openbsd GOARCH=386 go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=openbsd GOARCH=386 go build -o v2ctl -trimpath -ldflags "-s -w" -tags confonly ./infra/control/main
-          chmod +x v2ray v2ctl
-          zip v2ray-openbsd-32.zip v2ray v2ctl geosite.dat geoip.dat
-          rm -rf v2ray v2ctl
-      - name: Release openbsd-32
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-openbsd-32.zip
-          asset_name: v2ray-openbsd-32.zip
-          asset_content_type: application/zip
-
-      - name: Build openbsd-64
-        run: |
-          env CGO_ENABLED=0 GOOS=openbsd GOARCH=amd64 go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=openbsd GOARCH=amd64 go build -o v2ctl -trimpath -ldflags "-s -w" -tags confonly ./infra/control/main
-          chmod +x v2ray v2ctl
-          zip v2ray-openbsd-64.zip v2ray v2ctl geosite.dat geoip.dat
-          rm -rf v2ray v2ctl
-      - name: Release openbsd-64
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-openbsd-64.zip
-          asset_name: v2ray-openbsd-64.zip
-          asset_content_type: application/zip
-
-      - name: Build linux-arm32-v5
-        run: |
-          env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=5 go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=5 go build -o v2ctl -trimpath -ldflags "-s -w" -tags confonly ./infra/control/main
-          chmod +x v2ray v2ctl
-          zip v2ray-linux-arm32-v5.zip v2ray v2ctl geosite.dat geoip.dat
-          rm -rf v2ray v2ctl
-      - name: Release linux-arm32-v5
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-linux-arm32-v5.zip
-          asset_name: v2ray-linux-arm32-v5.zip
-          asset_content_type: application/zip
- 
-      - name: Build linux-arm32-v6
-        run: |
-          env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=6 go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=6 go build -o v2ctl -trimpath -ldflags "-s -w" -tags confonly ./infra/control/main
-          chmod +x v2ray v2ctl
-          zip v2ray-linux-arm32-v6.zip v2ray v2ctl geosite.dat geoip.dat
-          rm -rf v2ray v2ctl
-      - name: Release linux-arm32-v6
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-linux-arm32-v6.zip
-          asset_name: v2ray-linux-arm32-v6.zip
-          asset_content_type: application/zip
-
-      - name: Build linux-arm32-v7a
-        run: |
-          env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 go build -o v2ctl -trimpath -ldflags "-s -w" -tags confonly ./infra/control/main
-          chmod +x v2ray v2ctl
-          zip v2ray-linux-arm32-v7a.zip v2ray v2ctl geosite.dat geoip.dat
-          rm -rf v2ray v2ctl
-      - name: Release linux-arm32-v7a
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-linux-arm32-v7a.zip
-          asset_name: v2ray-linux-arm32-v7a.zip
-          asset_content_type: application/zip
-
-      - name: Build linux-arm64-v8a
-        run: |
-          env CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o v2ctl -trimpath -ldflags "-s -w" -tags confonly ./infra/control/main
-          chmod +x v2ray v2ctl
-          zip v2ray-linux-arm64-v8a.zip v2ray v2ctl geosite.dat geoip.dat
-          rm -rf v2ray v2ctl
-      - name: Release linux-arm64-v8a
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-linux-arm64-v8a.zip
-          asset_name: v2ray-linux-arm64-v8a.zip
-          asset_content_type: application/zip
-
-      - name: Build linux-mips32-hardfloat
-        run: |
-          env CGO_ENABLED=0 GOOS=linux GOARCH=mips GOMIPS=hardfloat go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=mips GOMIPS=hardfloat go build -o v2ctl -trimpath -ldflags "-s -w" -tags confonly ./infra/control/main
-          chmod +x v2ray v2ctl
-          zip v2ray-linux-mips32-hardfloat.zip v2ray v2ctl geosite.dat geoip.dat
-          rm -rf v2ray v2ctl
-      - name: Release linux-mips32-hardfloat
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-linux-mips32-hardfloat.zip
-          asset_name: v2ray-linux-mips32-hardfloat.zip
-          asset_content_type: application/zip
-
-      - name: Build linux-mips32-softfloat
-        run: |
-          env CGO_ENABLED=0 GOOS=linux GOARCH=mips GOMIPS=softfloat go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=mips GOMIPS=softfloat go build -o v2ctl -trimpath -ldflags "-s -w" -tags confonly ./infra/control/main
-          chmod +x v2ray v2ctl
-          zip v2ray-linux-mips32-softfloat.zip v2ray v2ctl geosite.dat geoip.dat
-          rm -rf v2ray v2ctl
-      - name: Release linux-mips32-softfloat
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-linux-mips32-softfloat.zip
-          asset_name: v2ray-linux-mips32-softfloat.zip
-          asset_content_type: application/zip
-
-      - name: Build linux-mips32le-hardfloat
-        run: |
-          env CGO_ENABLED=0 GOOS=linux GOARCH=mipsle GOMIPS=hardfloat go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=mipsle GOMIPS=hardfloat go build -o v2ctl -trimpath -ldflags "-s -w" -tags confonly ./infra/control/main
-          chmod +x v2ray v2ctl
-          zip v2ray-linux-mips32le-hardfloat.zip v2ray v2ctl geosite.dat geoip.dat
-          rm -rf v2ray v2ctl
-      - name: Release linux-mips32le-hardfloat
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-linux-mips32le-hardfloat.zip
-          asset_name: v2ray-linux-mips32le-hardfloat.zip
-          asset_content_type: application/zip
-
-      - name: Build linux-mips32le-softfloat
-        run: |
-          env CGO_ENABLED=0 GOOS=linux GOARCH=mipsle GOMIPS=softfloat go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=mipsle GOMIPS=softfloat go build -o v2ctl -trimpath -ldflags "-s -w" -tags confonly ./infra/control/main
-          chmod +x v2ray v2ctl
-          zip v2ray-linux-mips32le-softfloat.zip v2ray v2ctl geosite.dat geoip.dat
-          rm -rf v2ray v2ctl
-      - name: Release linux-mips32le-softfloat
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-linux-mips32le-softfloat.zip
-          asset_name: v2ray-linux-mips32le-softfloat.zip
-          asset_content_type: application/zip
-
-      - name: Build linux-mips64-hardfloat
-        run: |
-          env CGO_ENABLED=0 GOOS=linux GOARCH=mips64 GOMIPS64=hardfloat go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=mips64 GOMIPS64=hardfloat go build -o v2ctl -trimpath -ldflags "-s -w" -tags confonly ./infra/control/main
-          chmod +x v2ray v2ctl
-          zip v2ray-linux-mips64-hardfloat.zip v2ray v2ctl geosite.dat geoip.dat
-          rm -rf v2ray v2ctl
-      - name: Release linux-mips64-hardfloat
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-linux-mips64-hardfloat.zip
-          asset_name: v2ray-linux-mips64-hardfloat.zip
-          asset_content_type: application/zip
-
-      - name: Build linux-mips64-softfloat
-        run: |
-          env CGO_ENABLED=0 GOOS=linux GOARCH=mips64 GOMIPS64=softfloat go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=mips64 GOMIPS64=softfloat go build -o v2ctl -trimpath -ldflags "-s -w" -tags confonly ./infra/control/main
-          chmod +x v2ray v2ctl
-          zip v2ray-linux-mips64-softfloat.zip v2ray v2ctl geosite.dat geoip.dat
-          rm -rf v2ray v2ctl
-      - name: Release linux-mips64-softfloat
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-linux-mips64-softfloat.zip
-          asset_name: v2ray-linux-mips64-softfloat.zip
-          asset_content_type: application/zip
-
-      - name: Build linux-mips64le-hardfloat
-        run: |
-          env CGO_ENABLED=0 GOOS=linux GOARCH=mips64le GOMIPS64=hardfloat go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=mips64le GOMIPS64=hardfloat go build -o v2ctl -trimpath -ldflags "-s -w" -tags confonly ./infra/control/main
-          chmod +x v2ray v2ctl
-          zip v2ray-linux-mips64le-hardfloat.zip v2ray v2ctl geosite.dat geoip.dat
-          rm -rf v2ray v2ctl
-      - name: Release linux-mips64le-hardfloat
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-linux-mips64le-hardfloat.zip
-          asset_name: v2ray-linux-mips64le-hardfloat.zip
-          asset_content_type: application/zip
-
-      - name: Build linux-mips64le-softfloat
-        run: |
-          env CGO_ENABLED=0 GOOS=linux GOARCH=mips64le GOMIPS64=softfloat go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=mips64le GOMIPS64=softfloat go build -o v2ctl -trimpath -ldflags "-s -w" -tags confonly ./infra/control/main
-          chmod +x v2ray v2ctl
-          zip v2ray-linux-mips64le-softfloat.zip v2ray v2ctl geosite.dat geoip.dat
-          rm -rf v2ray v2ctl
-      - name: Release linux-mips64le-softfloat
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-linux-mips64le-softfloat.zip
-          asset_name: v2ray-linux-mips64le-softfloat.zip
-          asset_content_type: application/zip
-
-      - name: Build linux-ppc64-power8
-        run: |
-          env CGO_ENABLED=0 GOOS=linux GOARCH=ppc64 GOPPC64=power8 go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=ppc64 GOPPC64=power8 go build -o v2ctl -trimpath -ldflags "-s -w" -tags confonly ./infra/control/main
-          chmod +x v2ray v2ctl
-          zip v2ray-linux-ppc64-power8.zip v2ray v2ctl geosite.dat geoip.dat
-          rm -rf v2ray v2ctl
-      - name: Release linux-ppc64-power8
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-linux-ppc64-power8.zip
-          asset_name: v2ray-linux-ppc64-power8.zip
-          asset_content_type: application/zip
-
-      - name: Build linux-ppc64le-power8
-        run: |
-          env CGO_ENABLED=0 GOOS=linux GOARCH=ppc64le GOPPC64=power8 go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=ppc64le GOPPC64=power8 go build -o v2ctl -trimpath -ldflags "-s -w" -tags confonly ./infra/control/main
-          chmod +x v2ray v2ctl
-          zip v2ray-linux-ppc64le-power8.zip v2ray v2ctl geosite.dat geoip.dat
-          rm -rf v2ray v2ctl
-      - name: Release linux-ppc64le-power8
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-linux-ppc64le-power8.zip
-          asset_name: v2ray-linux-ppc64le-power8.zip
-          asset_content_type: application/zip
-
-      - name: Build linux-s390x
-        run: |
-          env CGO_ENABLED=0 GOOS=linux GOARCH=s390x go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=s390x go build -o v2ctl -trimpath -ldflags "-s -w" -tags confonly ./infra/control/main
-          chmod +x v2ray v2ctl
-          zip v2ray-linux-s390x.zip v2ray v2ctl geosite.dat geoip.dat
-          rm -rf v2ray v2ctl
-      - name: Release linux-s390x
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-linux-s390x.zip
-          asset_name: v2ray-linux-s390x.zip
-          asset_content_type: application/zip
-
-      - name: Build macos-64
-        run: |
-          env CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o v2ctl -trimpath -ldflags "-s -w" -tags confonly ./infra/control/main
-          zip v2ray-macos-64.zip v2ray v2ctl geosite.dat geoip.dat
-          rm -rf v2ray v2ctl
-      - name: Release macos-64
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-macos-64.zip
-          asset_name: v2ray-macos-64.zip
-          asset_content_type: application/zip
-
-      - name: Build windows-32
-        run: |
-          env CGO_ENABLED=0 GOOS=windows GOARCH=386 go build -o v2ray.exe -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=windows GOARCH=386 go build -o wv2ray.exe -trimpath -ldflags "-s -w -H windowsgui" ./main
-          env CGO_ENABLED=0 GOOS=windows GOARCH=386 go build -o v2ctl.exe -trimpath -ldflags "-s -w" -tags confonly ./infra/control/main
-          zip v2ray-windows-32.zip v2ray.exe v2ctl.exe wv2ray.exe geosite.dat geoip.dat
-          rm -rf v2ray.exe v2ctl.exe wv2ray.exe
-      - name: Release windows-32
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-windows-32.zip
-          asset_name: v2ray-windows-32.zip
-          asset_content_type: application/zip
-
-      - name: Build windows-64
-        run: |
-          env CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o v2ray.exe -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o wv2ray.exe -trimpath -ldflags "-s -w -H windowsgui" ./main
-          env CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o v2ctl.exe -trimpath -ldflags "-s -w" -tags confonly ./infra/control/main
-          zip v2ray-windows-64.zip v2ray.exe v2ctl.exe wv2ray.exe geosite.dat geoip.dat
-          rm -rf v2ray.exe v2ctl.exe wv2ray.exe
-      - name: Release windows-64
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-windows-64.zip
-          asset_name: v2ray-windows-64.zip
-          asset_content_type: application/zip
-
-      - name: Build windows-arm32-v7a
-        run: |
-          env CGO_ENABLED=0 GOOS=windows GOARCH=arm GOARM=7 go build -o v2ray.exe -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=windows GOARCH=arm GOARM=7 go build -o wv2ray.exe -trimpath -ldflags "-s -w -H windowsgui" ./main
-          env CGO_ENABLED=0 GOOS=windows GOARCH=arm GOARM=7 go build -o v2ctl.exe -trimpath -ldflags "-s -w" -tags confonly ./infra/control/main
-          zip v2ray-windows-arm32-v7a.zip v2ray.exe v2ctl.exe wv2ray.exe geosite.dat geoip.dat
-          rm -rf v2ray.exe v2ctl.exe wv2ray.exe
-      - name: Release windows-arm32-v7a
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-windows-arm32-v7a.zip
-          asset_name: v2ray-windows-arm32-v7a.zip
-          asset_content_type: application/zip
-
-      - name: Build dragonfly-64
-        run: |
-          env CGO_ENABLED=0 GOOS=dragonfly GOARCH=amd64 go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=dragonfly GOARCH=amd64 go build -o v2ctl -trimpath -ldflags "-s -w" -tags confonly ./infra/control/main
-          chmod +x v2ray v2ctl
-          zip v2ray-dragonfly-64.zip v2ray v2ctl geosite.dat geoip.dat
-          rm -rf v2ray v2ctl
-      - name: Release dragonfly-64
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-dragonfly-64.zip
-          asset_name: v2ray-dragonfly-64.zip
-          asset_content_type: application/zip
-
-      - name: Build linux-riscv64
-        run: |
-          env CGO_ENABLED=0 GOOS=linux GOARCH=riscv64 go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=riscv64 go build -o v2ctl -trimpath -ldflags "-s -w" -tags confonly ./infra/control/main
-          chmod +x v2ray v2ctl
-          zip v2ray-linux-riscv64.zip v2ray v2ctl geosite.dat geoip.dat
-          rm -rf v2ray v2ctl
-      - name: Release linux-riscv64
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-linux-riscv64.zip
-          asset_name: v2ray-linux-riscv64.zip
-          asset_content_type: application/zip
-
-      - name: Build linux-ppc64-power9
-        run: |
-          env CGO_ENABLED=0 GOOS=linux GOARCH=ppc64 GOPPC64=power9 go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=ppc64 GOPPC64=power9 go build -o v2ctl -trimpath -ldflags "-s -w" -tags confonly ./infra/control/main
-          chmod +x v2ray v2ctl
-          zip v2ray-linux-ppc64-power9.zip v2ray v2ctl geosite.dat geoip.dat
-          rm -rf v2ray v2ctl
-      - name: Release linux-ppc64-power9
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-linux-ppc64-power9.zip
-          asset_name: v2ray-linux-ppc64-power9.zip
-          asset_content_type: application/zip
-
-      - name: Build linux-ppc64le-power9
-        run: |
-          env CGO_ENABLED=0 GOOS=linux GOARCH=ppc64le GOPPC64=power9 go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          env CGO_ENABLED=0 GOOS=linux GOARCH=ppc64le GOPPC64=power9 go build -o v2ctl -trimpath -ldflags "-s -w" -tags confonly ./infra/control/main
-          chmod +x v2ray v2ctl
-          zip v2ray-linux-ppc64le-power9.zip v2ray v2ctl geosite.dat geoip.dat
-          rm -rf v2ray v2ctl
-      - name: Release linux-ppc64le-power9
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-linux-ppc64le-power9.zip
-          asset_name: v2ray-linux-ppc64le-power9.zip
-          asset_content_type: application/zip
-
-      - name: Prepare Openwrt environment
-        run: |
-          wget https://github.com/upx/upx/releases/download/v3.96/upx-3.96-amd64_linux.tar.xz && tar -Jxf upx-3.96-amd64_linux.tar.xz
-          mv upx-3.96-amd64_linux/upx $PWD && rm -rf upx-3.96-amd64_linux && chmod +x upx
-
-      - name: Build openwrt-arm32-v5
-        run: |
-          env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=5 go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          ./upx v2ray
-          zip v2ray-openwrt-arm32-v5.zip v2ray geosite.dat geoip.dat && rm -rf v2ray
-      - name: Release openwrt-arm32-v5
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-openwrt-arm32-v5.zip
-          asset_name: v2ray-openwrt-arm32-v5.zip
-          asset_content_type: application/zip
-
-      - name: Build openwrt-mips32le-hardfloat
-        run: |
-          env CGO_ENABLED=0 GOOS=linux GOARCH=mipsle GOMIPS=hardfloat go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          ./upx v2ray
-          zip v2ray-openwrt-mips32le-hardfloat.zip v2ray geosite.dat geoip.dat && rm -rf v2ray
-      - name: Release openwrt-mips32le-hardfloat
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-openwrt-mips32le-hardfloat.zip
-          asset_name: v2ray-openwrt-mips32le-hardfloat.zip
-          asset_content_type: application/zip
-
-      - name: Build openwrt-mips32le-softfloat
-        run: |
-          env CGO_ENABLED=0 GOOS=linux GOARCH=mipsle GOMIPS=softfloat go build -o v2ray -trimpath -ldflags "-s -w" ./main
-          ./upx v2ray
-          zip v2ray-openwrt-mips32le-softfloat.zip v2ray geosite.dat geoip.dat && rm -rf v2ray
-      - name: Release openwrt-mips32le-softfloat
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./v2ray-openwrt-mips32le-softfloat.zip
-          asset_name: v2ray-openwrt-mips32le-softfloat.zip
-          asset_content_type: application/zip
+          draft: false
+          prerelease: false
+          files: |
+            ./release/*
           
   push:
     needs: build
     runs-on: ubuntu-latest
     steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set variables
+        run: |
+          echo "VERSION=$(cat version | head -1 | tr -d [:space:])" >> $GITHUB_ENV
+        shell: bash
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -595,23 +80,36 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       
-      - name: Gain Dockerfile
+      - name: Build latest
         run: |
-          wget -O Dockerfile https://raw.githubusercontent.com/charlieethan/vless-build/master/src/Dockerfile
-          wget -O config.json https://raw.githubusercontent.com/charlieethan/vless-build/master/src/config.json
-          wget -O v2ray.sh https://raw.githubusercontent.com/charlieethan/vless-build/master/src/v2ray.sh
-      
-      - name: Build and push
-        run: |
+          cd src/
           docker buildx build --platform linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/ppc64le,linux/s390x \
           --output "type=image,push=true" \
           --tag "${{ secrets.DOCKER_USERNAME }}/vless:latest" \
+          --file Dockerfile .
+
+      - name: Build tag
+        run: |
+          cd src/
+          docker buildx build --platform linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/ppc64le,linux/s390x \
+          --output "type=image,push=true" \
+          --tag "${{ secrets.DOCKER_USERNAME }}/vless:${{ env.VERSION }}" \
           --file Dockerfile .
 
   test:
     needs: [build,push]
     runs-on: ubuntu-latest
     steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set variables
+        run: |
+          echo "VERSION=$(cat version | head -1 | tr -d [:space:])" >> $GITHUB_ENV
+        shell: bash
+
       - name: Test Docker image
         run: |
-          docker run --rm --entrypoint /usr/bin/v2ray ${{ secrets.DOCKER_USERNAME }}/vless -version
+          docker run --rm --entrypoint /usr/bin/v2ray ${{ secrets.DOCKER_USERNAME }}/vless:latest -version
+          docker run --rm --entrypoint /usr/bin/v2ray ${{ secrets.DOCKER_USERNAME }}/vless:${{ env.VERSION }} -version

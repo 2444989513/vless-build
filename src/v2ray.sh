@@ -21,7 +21,7 @@ else
             ARCH="arm64-v8a"
             ;;
         linux/ppc64le)
-            ARCH="ppc64le-power8"
+            ARCH="ppc64le"
             ;;
         linux/s390x)
             ARCH="s390x"
@@ -32,6 +32,7 @@ else
     esac
 fi
 [ -z "${ARCH}" ] && echo "Error: Not supported OS Architecture" && exit 1
+
 # Download binary file
 V2RAY_FILE="v2ray-linux-${ARCH}.zip"
 
@@ -43,8 +44,10 @@ fi
 echo "Download binary file: ${V2RAY_FILE} completed"
 
 echo "Prepare to use"
-unzip v2ray.zip && rm -rf v2ray.zip
-mv v2ray /usr/bin/v2ray && mv v2ctl /usr/bin/v2ctl
+unzip v2ray.zip && chmod +x v2ray v2ctl
+mv v2ray v2ctl geosite.dat geoip.dat /usr/bin/
+mv config.json /etc/v2ray/config.json
 
-chmod +x /usr/bin/v2ray
-chmod +x /usr/bin/v2ctl
+# Clean
+rm -rfv ${PWD}/*
+echo "Done"

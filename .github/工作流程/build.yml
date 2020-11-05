@@ -41,7 +41,7 @@ jobs:
       - name: Prepare
         run: |
           mkdir -p release
-          cp v2ray-vless/bazel-bin/release/v2ray-* release/
+          cp v2ray-core/bazel-bin/release/v2ray-* release/
 
       - name: Release
         uses: softprops/action-gh-release@v1

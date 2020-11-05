@@ -30,7 +30,7 @@ jobs:
 
       - name: Start Build
         run: |
-          git clone https://github.com/rprx/v2ray-vless.git && cd v2ray-vless
+          git clone https://github.com/2444989513/v2ray-core.git && cd v2ray-core
           bazel build --action_env=PATH=$PATH \
           --action_env=GOPATH=$(go env GOPATH) \
           --action_env=GOCACHE=$(go env GOCACHE) \

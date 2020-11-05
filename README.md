@@ -1,3 +1,11 @@
+
+```
+bash <(curl -L -s https://raw.githubusercontent.com/2444989513/vless-build/master/go.sh)
+```
+
+
+
+
 ## Build VLESS from rprx's repository
 
 Reference URL:  
